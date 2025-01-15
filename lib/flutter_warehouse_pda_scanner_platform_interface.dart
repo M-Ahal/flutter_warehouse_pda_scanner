@@ -8,7 +8,8 @@ abstract class FlutterWarehousePdaScannerPlatform extends PlatformInterface {
 
   static final Object _token = Object();
 
-  static FlutterWarehousePdaScannerPlatform _instance = MethodChannelFlutterWarehousePdaScanner();
+  static FlutterWarehousePdaScannerPlatform _instance =
+      MethodChannelFlutterWarehousePdaScanner();
 
   /// The default instance of [FlutterWarehousePdaScannerPlatform] to use.
   ///
@@ -23,7 +24,6 @@ abstract class FlutterWarehousePdaScannerPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<String?> getPlatformVersion() {
-    throw UnimplementedError('platformVersion() has not been implemented.');
-  }
+  Future<String?> getPlatformVersion() =>
+      throw UnimplementedError('platformVersion() has not been implemented.');
 }
