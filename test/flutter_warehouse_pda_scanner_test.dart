@@ -12,7 +12,7 @@ class MockFlutterWarehousePdaScannerPlatform
   Future<String?> getPlatformVersion() => Future.value('42');
 }
 
-void main() {
+void flutterWarehousePdaScannerTest() {
   final FlutterWarehousePdaScannerPlatform initialPlatform = FlutterWarehousePdaScannerPlatform.instance;
 
   test('$MethodChannelFlutterWarehousePdaScanner is the default instance', () {

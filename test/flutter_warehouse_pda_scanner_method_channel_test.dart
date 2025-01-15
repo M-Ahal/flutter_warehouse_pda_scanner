@@ -2,7 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_warehouse_pda_scanner/flutter_warehouse_pda_scanner_method_channel.dart';
 
-void main() {
+void flutterWarehousePdaScannerMethodChannelTest() {
   MethodChannelFlutterWarehousePdaScanner platform = MethodChannelFlutterWarehousePdaScanner();
   const MethodChannel channel = MethodChannel('flutter_warehouse_pda_scanner');
 
