@@ -15,9 +15,13 @@ class FlutterWarehousePdaScannerPlugin {
   static const String eventChannelName = "wyb.com/pda_scanner";
 
   FlutterWarehousePdaScannerPlugin._() {
-    _eventChannel = const EventChannel(eventChannelName); //定义接收底层操作系统主动发来的消息通道
-    _eventChannel.receiveBroadcastStream().listen(_onEvent,
-        onError: _onError); //注册消息回调函数;//广播流来处理EventChannel发来的消息
+    //Define a channel to receive messages proactively sent by the underlying operating system
+    _eventChannel = const EventChannel(eventChannelName);
+    // Register message callback function; Broadcast stream to process messages sent by EventChannel
+    _eventChannel.receiveBroadcastStream().listen(
+          _onEvent,
+          onError: _onError,
+        );
   }
 
   void _onEvent(event) {

@@ -90,15 +90,15 @@ public class FlutterWarehousePdaScannerPlugin implements FlutterPlugin, MethodCa
                 String actionName = intent.getAction();
                 System.out.println(actionName);
                 if (UROVO_SCAN_ACTION.equals(actionName)) {
-                    System.out.println("接收到广播数据>>>>>>>>>>>>>>" + intent.getStringExtra("barcode_string"));
+                    System.out.println("Broadcast data received>>>>>>>>>>>>>>" + intent.getStringExtra("barcode_string"));
                     events.success(intent.getStringExtra("barcode_string"));
                 } else if (NL_SCAN_ACTION.equals(actionName)) {
-                    System.out.println("接收到广播数据>>>>>>>>>>>>>>" + intent.getStringExtra("SCAN_BARCODE1"));
+                    System.out.println("Broadcast data received>>>>>>>>>>>>>>" + intent.getStringExtra("SCAN_BARCODE1"));
                     events.success(intent.getStringExtra("SCAN_BARCODE1"));
                 } else if (HONEYWELL_SCAN_ACTION.equals(actionName)) {
-                    System.out.println("接收到广播数据>>>>>>>>>>>>>>" + intent.getStringExtra("data"));
+                    System.out.println("Broadcast data received>>>>>>>>>>>>>>" + intent.getStringExtra("data"));
                     events.success(intent.getStringExtra("data"));
-                }else {
+                } else {
 //                    Log.i("PdaScannerPlugin", "NoSuchAction");
                     events.error("error", "error: NoSuchAction", null);
                 }
