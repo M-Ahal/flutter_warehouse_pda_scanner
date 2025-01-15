@@ -28,11 +28,11 @@ public class FlutterWarehousePdaScannerPlugin implements FlutterPlugin, MethodCa
 
     private static final String _channel = "wyb.com/pda_scanner";
 
-    /// 优博讯
+    /// Uboxun
     private static final String UROVO_SCAN_ACTION = "android.intent.ACTION_DECODE_DATA";
-    /// 新大陆
+    /// New
     private static final String NL_SCAN_ACTION = "nlscan.action.SCANNER_RESULT";
-    /// 霍尼韦尔
+    /// Honeywell
     private static final String HONEYWELL_SCAN_ACTION = "com.honeywell.decode.intent.action.EDIT_DATA";
 
     @Override
@@ -89,16 +89,15 @@ public class FlutterWarehousePdaScannerPlugin implements FlutterPlugin, MethodCa
                 String actionName = intent.getAction();
                 System.out.println(actionName);
                 if (actionName.equals(UROVO_SCAN_ACTION)) {
-                    System.out.println("Broadcast data received>>>>>>>>>>>>>>" + intent.getStringExtra("barcode_string"));
+                    System.out.println("Broadcast data received ->" + intent.getStringExtra("barcode_string"));
                     events.success(intent.getStringExtra("barcode_string"));
                 } else if (actionName.equals(NL_SCAN_ACTION)) {
-                    System.out.println("Broadcast data received>>>>>>>>>>>>>>" + intent.getStringExtra("SCAN_BARCODE1"));
+                    System.out.println("Broadcast data received ->" + intent.getStringExtra("SCAN_BARCODE1"));
                     events.success(intent.getStringExtra("SCAN_BARCODE1"));
                 } else if (actionName.equals(HONEYWELL_SCAN_ACTION)) {
-                    System.out.println("Broadcast data received>>>>>>>>>>>>>>" + intent.getStringExtra("data"));
+                    System.out.println("Broadcast data received ->" + intent.getStringExtra("data"));
                     events.success(intent.getStringExtra("data"));
                 } else {
-//                    Log.i("PdaScannerPlugin", "NoSuchAction");
                     events.error("error", "error: NoSuchAction", null);
                 }
             }
