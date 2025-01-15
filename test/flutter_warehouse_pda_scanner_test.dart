@@ -7,13 +7,13 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 class MockFlutterWarehousePdaScannerPlatform
     with MockPlatformInterfaceMixin
     implements FlutterWarehousePdaScannerPlatform {
-
   @override
   Future<String?> getPlatformVersion() => Future.value('42');
 }
 
 void flutterWarehousePdaScannerTest() {
-  final FlutterWarehousePdaScannerPlatform initialPlatform = FlutterWarehousePdaScannerPlatform.instance;
+  final FlutterWarehousePdaScannerPlatform initialPlatform =
+      FlutterWarehousePdaScannerPlatform.instance;
 
   test('$MethodChannelFlutterWarehousePdaScanner is the default instance', () {
     expect(initialPlatform, isInstanceOf<MethodChannelFlutterWarehousePdaScanner>());
