@@ -19,21 +19,7 @@ rootProject.allprojects {
     }
 }
 
-def localProperties = new Properties()
-def localPropertiesFile = rootProject.file('local.properties')
-if (localPropertiesFile.exists()) {
-    localPropertiesFile.withReader('UTF-8') { reader ->
-        localProperties.load(reader)
-    }
-}
-
-def flutterRoot = localProperties.getProperty('flutter.sdk')
-if (flutterRoot == null) {
-    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
-}
-
 apply plugin: 'com.android.library'
-apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
     namespace 'com.wyb.flutter_warehouse_pda_scanner'
@@ -47,13 +33,4 @@ android {
     defaultConfig {
         minSdkVersion 16
     }
-}
-
-flutter {
-    source '../..'
-}
-
-dependencies {
-    implementation 'androidx.annotation:annotation:1.9.1'
-//    implementation files('D:/Programming/Android/Tools/Flutter_SDK/bin/cache/artifacts/engine/android-x64/flutter.jar')
 }
