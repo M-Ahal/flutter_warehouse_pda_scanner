@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
 
@@ -28,13 +29,6 @@ public class FlutterWarehousePdaScannerPlugin implements FlutterPlugin, MethodCa
 
     private static final String _channel = "wyb.com/pda_scanner";
 
-    /// Uboxun
-    private static final String UROVO_SCAN_ACTION = "android.intent.ACTION_DECODE_DATA";
-    /// New
-    private static final String NL_SCAN_ACTION = "nlscan.action.SCANNER_RESULT";
-    /// Honeywell
-    private static final String HONEYWELL_SCAN_ACTION = "com.honeywell.decode.intent.action.EDIT_DATA";
-
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
         channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "flutter_warehouse_pda_scanner");
@@ -47,17 +41,19 @@ public class FlutterWarehousePdaScannerPlugin implements FlutterPlugin, MethodCa
                     private BroadcastReceiver barCodeReceiver;
 
                     @Override
-                    public void onListen(Object arguments, EventChannel.EventSink events) {
+                    public void onListen(Object ignoredArguments, EventChannel.EventSink events) {
                         barCodeReceiver = createReceiver(events);
                         IntentFilter filter = new IntentFilter();
-                        filter.addAction(UROVO_SCAN_ACTION);
-                        filter.addAction(NL_SCAN_ACTION);
-                        filter.addAction(HONEYWELL_SCAN_ACTION);
-                        applicationContext.registerReceiver(barCodeReceiver, filter);
+                        for (SupportedDevices device : SupportedDevices.values()) {
+                            filter.addAction(device.scanAction);
+                        }
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            applicationContext.registerReceiver(barCodeReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
+                        }
                     }
 
                     @Override
-                    public void onCancel(Object arguments) {
+                    public void onCancel(Object ignoredArguments) {
                         applicationContext.unregisterReceiver(barCodeReceiver);
                         barCodeReceiver = null;
                     }
@@ -88,18 +84,15 @@ public class FlutterWarehousePdaScannerPlugin implements FlutterPlugin, MethodCa
             public void onReceive(Context context, Intent intent) {
                 String actionName = intent.getAction();
                 System.out.println(actionName);
-                if (actionName.equals(UROVO_SCAN_ACTION)) {
-                    System.out.println("Broadcast data received ->" + intent.getStringExtra("barcode_string"));
-                    events.success(intent.getStringExtra("barcode_string"));
-                } else if (actionName.equals(NL_SCAN_ACTION)) {
-                    System.out.println("Broadcast data received ->" + intent.getStringExtra("SCAN_BARCODE1"));
-                    events.success(intent.getStringExtra("SCAN_BARCODE1"));
-                } else if (actionName.equals(HONEYWELL_SCAN_ACTION)) {
-                    System.out.println("Broadcast data received ->" + intent.getStringExtra("data"));
-                    events.success(intent.getStringExtra("data"));
-                } else {
+                var deviceWithInfo = SupportedDevices.fromAction(actionName);
+                if (deviceWithInfo == null) {
                     events.error("error", "error: NoSuchAction", null);
+                    return;
                 }
+
+                String intentData = intent.getStringExtra(deviceWithInfo.extendedDataName);
+                System.out.println("Broadcast data received -> " + '"' + intentData + '"');
+                events.success(intentData);
             }
         };
     }
