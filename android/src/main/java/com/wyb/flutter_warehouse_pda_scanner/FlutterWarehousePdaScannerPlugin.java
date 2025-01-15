@@ -89,13 +89,13 @@ public class FlutterWarehousePdaScannerPlugin implements FlutterPlugin, MethodCa
             public void onReceive(Context context, Intent intent) {
                 String actionName = intent.getAction();
                 System.out.println(actionName);
-                if (UROVO_SCAN_ACTION.equals(actionName)) {
+                if (actionName.equals(UROVO_SCAN_ACTION)) {
                     System.out.println("Broadcast data received>>>>>>>>>>>>>>" + intent.getStringExtra("barcode_string"));
                     events.success(intent.getStringExtra("barcode_string"));
-                } else if (NL_SCAN_ACTION.equals(actionName)) {
+                } else if (actionName.equals(NL_SCAN_ACTION)) {
                     System.out.println("Broadcast data received>>>>>>>>>>>>>>" + intent.getStringExtra("SCAN_BARCODE1"));
                     events.success(intent.getStringExtra("SCAN_BARCODE1"));
-                } else if (HONEYWELL_SCAN_ACTION.equals(actionName)) {
+                } else if (actionName.equals(HONEYWELL_SCAN_ACTION)) {
                     System.out.println("Broadcast data received>>>>>>>>>>>>>>" + intent.getStringExtra("data"));
                     events.success(intent.getStringExtra("data"));
                 } else {
