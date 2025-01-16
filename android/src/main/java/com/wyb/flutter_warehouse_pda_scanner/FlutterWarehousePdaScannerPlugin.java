@@ -50,6 +50,9 @@ public class FlutterWarehousePdaScannerPlugin implements FlutterPlugin, MethodCa
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                             applicationContext.registerReceiver(barCodeReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
                         }
+                        else {
+                            applicationContext.registerReceiver(barCodeReceiver, filter);
+                        }
                     }
 
                     @Override
