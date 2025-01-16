@@ -1,1 +1,2 @@
 rootProject.name = 'flutter_warehouse_pda_scanner'
+include ':app', ':DataCollectionLib'
