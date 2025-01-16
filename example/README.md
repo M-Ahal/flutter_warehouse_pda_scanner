@@ -1,6 +1,6 @@
-# flutter_warehouse_pda_scanner_example
+# example
 
-Demonstrates how to use the flutter_warehouse_pda_scanner plugin.
+A new Flutter project.
 
 ## Getting Started
 
