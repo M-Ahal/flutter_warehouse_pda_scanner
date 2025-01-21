@@ -1,5 +1,8 @@
 allprojects {
     repositories {
+        // Local Maven repository must come first
+        maven { url = uri("${rootDir}/../android/libs/repo") }
+
         google()
         mavenCentral()
     }
