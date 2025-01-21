@@ -3,11 +3,11 @@ version '1.0'
 
 buildscript {
     repositories {
-        // Local Maven repository must come first
-        maven { url = uri("${rootDir}/libs/repo") }
-
         google()
         mavenCentral()
+        flatDir {
+            dirs '../libs'
+        }
     }
 
     dependencies {
@@ -19,14 +19,10 @@ rootProject.allprojects {
     repositories {
         google()
         mavenCentral()
-
-        // Include the local Maven repository
-        maven { url = uri("${rootDir}/libs/repo") }
     }
 }
 
 apply plugin: 'com.android.library'
-apply plugin: 'maven-publish' // Add the Maven Publish plugin
 
 android {
     // Conditional for compatibility with AGP < 4.2.
@@ -47,38 +43,5 @@ android {
 
 dependencies {
     implementation 'androidx.annotation:annotation:1.9.1'
-
-    // Add the DataCollection.aar dependency from the local Maven repository
-    implementation('com.wyb:DataCollection:1.0')
-}
-
-publishing {
-    publications {
-        aar(MavenPublication) {
-            groupId = 'com.wyb' // Set your group ID
-            artifactId = 'DataCollection' // Set your artifact ID
-            version = '1.0' // Set the version
-
-            // Publish the .aar file as the artifact
-            artifact("${rootDir}/libs/DataCollection.aar")
-
-            // Include the dependencies in the POM
-            pom {
-                withXml {
-                    asNode().appendNode('dependencies').appendNode('dependency').with {
-                        appendNode('groupId', 'androidx.annotation')
-                        appendNode('artifactId', 'annotation')
-                        appendNode('version', '1.9.1')
-                    }
-                }
-            }
-        }
-    }
-
-    repositories {
-        // Publish the .aar to a local Maven repository
-        maven {
-            url = uri("${rootDir}/libs/repo")
-        }
-    }
+    implementation(name: 'DataCollection', ext: 'aar')
 }
