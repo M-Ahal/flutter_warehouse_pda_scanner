@@ -37,7 +37,7 @@ public class Message implements Parcelable {
    }
 
    public int describeContents() {
-      return 1;
+      return Parcelable.CONTENTS_FILE_DESCRIPTOR;
    }
 
    public void writeToParcel(Parcel dest, int flags) {

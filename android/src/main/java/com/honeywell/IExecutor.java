@@ -4,6 +4,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.os.IInterface;
 import android.os.Parcel;
+import android.os.Parcelable;
 import android.os.RemoteException;
 
 public interface IExecutor extends IInterface {
@@ -50,7 +51,7 @@ public interface IExecutor extends IInterface {
                reply.writeNoException();
                if (_result != null) {
                   reply.writeInt(1);
-                  _result.writeToParcel(reply, 1);
+                  _result.writeToParcel(reply, Parcelable.PARCELABLE_WRITE_RETURN_VALUE);
                } else {
                   reply.writeInt(0);
                }
@@ -58,15 +59,15 @@ public interface IExecutor extends IInterface {
                return true;
             case 2:
                data.enforceInterface(descriptor);
-               Message _arg0;
+               Message _arg1;
                if (0 != data.readInt()) {
-                  _arg0 = (Message)Message.CREATOR.createFromParcel(data);
+                  _arg1 = (Message)Message.CREATOR.createFromParcel(data);
                } else {
-                  _arg0 = null;
+                  _arg1 = null;
                }
 
-               IExecutor _arg1 = asInterface(data.readStrongBinder());
-               this.executeAsync(_arg0, _arg1);
+               IExecutor _arg2 = asInterface(data.readStrongBinder());
+               this.executeAsync(_arg1, _arg2);
                return true;
             case 1598968902:
                reply.writeString(descriptor);
