@@ -46,6 +46,7 @@ public class FlutterWarehousePdaScannerPlugin implements FlutterPlugin, MethodCa
         channel.setMethodCallHandler(this);
 
 
+
         new EventChannel(flutterPluginBinding.getBinaryMessenger(), _channel).setStreamHandler(
                 new EventChannel.StreamHandler() {
 
@@ -64,6 +65,9 @@ public class FlutterWarehousePdaScannerPlugin implements FlutterPlugin, MethodCa
                         else {
                             applicationContext.registerReceiver(barCodeReceiver, filter);
                         }
+
+                        System.out.println("Starting the init of honeywell 🐝" );
+                        initHoneywell();
                     }
 
                     @Override
@@ -75,7 +79,6 @@ public class FlutterWarehousePdaScannerPlugin implements FlutterPlugin, MethodCa
         );
 
         applicationContext = flutterPluginBinding.getApplicationContext();
-        initHoneywell();
     }
 
     @Override
@@ -124,6 +127,42 @@ public class FlutterWarehousePdaScannerPlugin implements FlutterPlugin, MethodCa
             manager = aidcManager;
             try{
                 barcodeReader = manager.createBarcodeReader();
+                if (barcodeReader == null) {
+                    System.out.println("Error: No barcode reader created");
+                    return;
+                }
+
+                barcodeReader.addBarcodeListener(this);
+                // set the trigger mode to client control
+                try {
+                    barcodeReader.setProperty(BarcodeReader.PROPERTY_TRIGGER_CONTROL_MODE,
+                            BarcodeReader.TRIGGER_CONTROL_MODE_AUTO_CONTROL);
+                } catch (UnsupportedPropertyException e) {
+                    System.out.println("Failed to apply properties");
+                }
+                Map<String, Object> properties = new HashMap<>();
+                // Set Symbologies On/Off
+                properties.put(BarcodeReader.PROPERTY_CODE_128_ENABLED, true);
+                properties.put(BarcodeReader.PROPERTY_GS1_128_ENABLED, true);
+                properties.put(BarcodeReader.PROPERTY_QR_CODE_ENABLED, true);
+                properties.put(BarcodeReader.PROPERTY_CODE_39_ENABLED, true);
+                properties.put(BarcodeReader.PROPERTY_DATAMATRIX_ENABLED, true);
+                properties.put(BarcodeReader.PROPERTY_UPC_A_ENABLE, true);
+                properties.put(BarcodeReader.PROPERTY_EAN_13_ENABLED, false);
+                properties.put(BarcodeReader.PROPERTY_AZTEC_ENABLED, false);
+                properties.put(BarcodeReader.PROPERTY_CODABAR_ENABLED, false);
+                properties.put(BarcodeReader.PROPERTY_INTERLEAVED_25_ENABLED, false);
+                properties.put(BarcodeReader.PROPERTY_PDF_417_ENABLED, false);
+                // Set Max Code 39 barcode length
+                properties.put(BarcodeReader.PROPERTY_CODE_39_MAXIMUM_LENGTH, 10);
+                // Turn on center decoding
+                properties.put(BarcodeReader.PROPERTY_CENTER_DECODE, true);
+                // Enable bad read response
+                properties.put(BarcodeReader.PROPERTY_NOTIFICATION_BAD_READ_ENABLED, true);
+                // Sets time period for decoder timeout in any mode
+                properties.put(BarcodeReader.PROPERTY_DECODER_TIMEOUT,  400);
+                // Apply the settings
+                barcodeReader.setProperties(properties);
             }
             catch (InvalidScannerNameException e){
                 System.out.println("Invalid Scanner Name Exception: " + e.getMessage());
@@ -132,42 +171,6 @@ public class FlutterWarehousePdaScannerPlugin implements FlutterPlugin, MethodCa
                 System.out.println("Exception: " + e.getMessage());
             }
         });
-
-        if (barcodeReader == null) {
-            System.out.println("Error: No barcode reader created");
-            return;
-        }
-        barcodeReader.addBarcodeListener(this);
-        // set the trigger mode to client control
-        try {
-            barcodeReader.setProperty(BarcodeReader.PROPERTY_TRIGGER_CONTROL_MODE,
-                    BarcodeReader.TRIGGER_CONTROL_MODE_AUTO_CONTROL);
-        } catch (UnsupportedPropertyException e) {
-            System.out.println("Failed to apply properties");
-        }
-        Map<String, Object> properties = new HashMap<>();
-        // Set Symbologies On/Off
-        properties.put(BarcodeReader.PROPERTY_CODE_128_ENABLED, true);
-        properties.put(BarcodeReader.PROPERTY_GS1_128_ENABLED, true);
-        properties.put(BarcodeReader.PROPERTY_QR_CODE_ENABLED, true);
-        properties.put(BarcodeReader.PROPERTY_CODE_39_ENABLED, true);
-        properties.put(BarcodeReader.PROPERTY_DATAMATRIX_ENABLED, true);
-        properties.put(BarcodeReader.PROPERTY_UPC_A_ENABLE, true);
-        properties.put(BarcodeReader.PROPERTY_EAN_13_ENABLED, false);
-        properties.put(BarcodeReader.PROPERTY_AZTEC_ENABLED, false);
-        properties.put(BarcodeReader.PROPERTY_CODABAR_ENABLED, false);
-        properties.put(BarcodeReader.PROPERTY_INTERLEAVED_25_ENABLED, false);
-        properties.put(BarcodeReader.PROPERTY_PDF_417_ENABLED, false);
-        // Set Max Code 39 barcode length
-        properties.put(BarcodeReader.PROPERTY_CODE_39_MAXIMUM_LENGTH, 10);
-        // Turn on center decoding
-        properties.put(BarcodeReader.PROPERTY_CENTER_DECODE, true);
-        // Enable bad read response
-        properties.put(BarcodeReader.PROPERTY_NOTIFICATION_BAD_READ_ENABLED, true);
-        // Sets time period for decoder timeout in any mode
-        properties.put(BarcodeReader.PROPERTY_DECODER_TIMEOUT,  400);
-        // Apply the settings
-        barcodeReader.setProperties(properties);
     }
 
     @Override
