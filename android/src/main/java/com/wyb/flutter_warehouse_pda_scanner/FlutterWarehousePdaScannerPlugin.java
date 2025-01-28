@@ -44,8 +44,8 @@ public class FlutterWarehousePdaScannerPlugin implements FlutterPlugin, MethodCa
                     public void onListen(Object ignoredArguments, EventChannel.EventSink events) {
                         barCodeReceiver = createReceiver(events);
                         IntentFilter filter = new IntentFilter();
-                        for (SupportedDevices device : SupportedDevices.values()) {
-                            filter.addAction(device.scanAction);
+                        for (IntentSupportedDevices device : IntentSupportedDevices.values()) {
+                            filter.addAction(device.scanIntentAction);
                         }
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                             applicationContext.registerReceiver(barCodeReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
@@ -87,7 +87,7 @@ public class FlutterWarehousePdaScannerPlugin implements FlutterPlugin, MethodCa
             public void onReceive(Context context, Intent intent) {
                 String actionName = intent.getAction();
                 System.out.println(actionName);
-                var deviceWithInfo = SupportedDevices.fromAction(actionName);
+                var deviceWithInfo = IntentSupportedDevices.fromAction(actionName);
                 if (deviceWithInfo == null) {
                     events.error("error", "error: NoSuchAction", null);
                     return;
