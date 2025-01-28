@@ -17,15 +17,14 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
+  String _barcode = '';
   final _flutterWarehousePdaScannerPlugin = FlutterWarehousePdaScanner();
 
   @override
   void initState() {
     super.initState();
     initPlatformState();
-    FlutterWarehousePdaScannerPlugin.instance.getBarcodeResp.listen((event) {
-      debugPrint("listen -- event -- $event");
-    });
+    FlutterWarehousePdaScannerPlugin.instance.getBarcodeResp.listen((event) => setState(() => _barcode = event));
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -58,7 +57,12 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+          child: Column(
+            children: [
+              Text('Running on: $_platformVersion'),
+              Text('Decoded value: $_barcode'),
+            ],
+          ),
         ),
       ),
     );
